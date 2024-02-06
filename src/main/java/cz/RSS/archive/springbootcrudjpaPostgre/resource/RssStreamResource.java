@@ -15,9 +15,9 @@ import java.util.List;
 @RequestMapping("/Streams")
 public class RssStreamResource {
 
-    @GetMapping(value = "/", produces = MediaTypes.HAL_JSON_VALUE)
+    @GetMapping(value = "/all", produces = MediaTypes.HAL_JSON_VALUE)
     public List<Stream> getAll(){
-        Stream stream1 = new Stream("teststream");
+        Stream stream1 = new Stream(1L,"teststream", "ccshmbhmb");
         Link link= WebMvcLinkBuilder.linkTo(RssStreamResource.class).slash(stream1.getName()).withSelfRel();
         stream1.add(link);
         return Arrays.asList(stream1, stream1);
