@@ -1,6 +1,7 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,8 @@ import org.springframework.hateoas.RepresentationModel;
 @Table(name = "streams")
 public class Stream extends RepresentationModel {
     @Id
-    private Long id;
+    @GeneratedValue
+    private int id;
     private String name;
-    private String link;
+    private String source;
 }
