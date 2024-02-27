@@ -35,7 +35,7 @@ public class RssStreamResource {
         return stream1;
     }
     @PostMapping(value = "/addstream")
-    public void addStream(@RequestParam String name, @RequestParam String url){
+    public void addStream(@RequestParam("name") String name, @RequestParam("url") String url){
         streamRepo.save(new Stream(name,url));
     }
 }
