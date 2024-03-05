@@ -1,9 +1,6 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +16,7 @@ public class Stream extends RepresentationModel {
     @GeneratedValue
     private int id;
     private String name;
+    @Column(unique = true)
     private String url;
 
     public Stream(String name, String url){
