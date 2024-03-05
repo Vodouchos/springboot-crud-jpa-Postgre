@@ -22,11 +22,14 @@ public class RssStreamResource {
         return streamRepo.getReferenceById(id);
     }
     @PostMapping(value = "/addstream")
-    public void addStream(@RequestParam("name") String name, @RequestParam("url") String url){
+    public int addStream(@RequestParam("name") String name, @RequestParam("url") String url){
+        url = url.replaceFirst("^(https://www\\.|http://www\\.|http://|https://|www\\.)","");
         streamRepo.save(new Stream(name,url));
+        return 200;
     }
     @PostMapping(value = "/removestream")
-    public void removeStream(@RequestParam("id") int id){
+    public int removeStream(@RequestParam("id") int id){
         streamRepo.deleteById(id);
+        return 200;
     }
 }
