@@ -21,12 +21,12 @@ public class RssStreamResource {
     private StreamService streamService;
     @GetMapping(value = "/all", produces = MediaTypes.HAL_JSON_VALUE)
     public List<Stream> getAll(){
-        logger.error("getAll called");
+        logger.info("getAll called");
         return streamService.getAll();
     }
     @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public Stream getStream(@PathVariable int id){
-        logger.trace("getStream called. ID: " + id);
+        logger.info("getStream called. ID: " + id);
         return streamService.getStream(id);
     }
     @PostMapping(value = "/addstream")
@@ -35,7 +35,7 @@ public class RssStreamResource {
         streamService.addStream(name,url);
         return 201;
     }
-    @DeleteMapping (value = "/removestream")
+    @PostMapping (value = "/removestream") //basic HTML form does not allow delete
     public int removeStream(@RequestParam("id") int id){
         logger.info("addStream called. id: " + id);
         streamService.removeStream(id);
