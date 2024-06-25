@@ -1,9 +1,7 @@
-package cz.RSS.archive.springbootcrudjpaPostgre.resource;
+package cz.RSS.archive.springbootcrudjpaPostgre.controllers;
 
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RSSItem;
-import cz.RSS.archive.springbootcrudjpaPostgre.model.Stream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
-import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/items")
-public class RssItemsResource {
+public class RssItemsController {
     @Autowired
     private ItemRepository itemRepo;
     @GetMapping(value = "/all", produces = MediaTypes.HAL_JSON_VALUE)

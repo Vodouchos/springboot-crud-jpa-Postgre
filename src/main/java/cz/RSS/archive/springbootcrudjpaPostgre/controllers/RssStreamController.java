@@ -1,4 +1,4 @@
-package cz.RSS.archive.springbootcrudjpaPostgre.resource;
+package cz.RSS.archive.springbootcrudjpaPostgre.controllers;
 
 import cz.RSS.archive.springbootcrudjpaPostgre.model.Stream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
@@ -13,10 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/streams")
-public class RssStreamResource {
+public class RssStreamController {
     @Autowired
     private StreamRepository streamRepo;
-    Logger logger = LoggerFactory.getLogger(RssStreamResource.class);
+    Logger logger = LoggerFactory.getLogger(RssStreamController.class);
     @Autowired
     private StreamService streamService;
     @GetMapping(value = "/all", produces = MediaTypes.HAL_JSON_VALUE)
@@ -37,7 +37,7 @@ public class RssStreamResource {
     }
     @PostMapping (value = "/removestream") //basic HTML form does not allow delete
     public int removeStream(@RequestParam("id") int id){
-        logger.info("addStream called. id: " + id);
+        logger.info("removeStream called. id: " + id);
         streamService.removeStream(id);
         return 200;
     }
