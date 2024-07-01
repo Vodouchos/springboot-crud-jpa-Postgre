@@ -1,25 +1,28 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.service;
 
-import cz.RSS.archive.springbootcrudjpaPostgre.model.Stream;
+import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class StreamService {
     @Autowired
     private StreamRepository streamRepo;
 
-    public List<Stream> getAll(){
+    public List<RStream> getAll(){
         return streamRepo.findAll();
     }
-    public Stream getStream(int id){
-        return streamRepo.getReferenceById(id);
+    public RStream getStream(int id){
+        Optional<RStream> optrstream = streamRepo.findById(id);
+        return optrstream.orElse(null);
     }
     public void addStream(String name, String url){
-        url = url.replaceFirst("^(https://www\\.|http://www\\.|http://|https://|www\\.)","");
-        streamRepo.save(new Stream(name,url));
+        //todo url testing
+        streamRepo.save(new RStream(name,url));
     }
     public void removeStream(int id){
         streamRepo.deleteById(id);

@@ -1,6 +1,6 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.controllers;
 
-import cz.RSS.archive.springbootcrudjpaPostgre.model.Stream;
+import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.service.StreamService;
 import org.slf4j.Logger;
@@ -20,12 +20,12 @@ public class RssStreamController {
     @Autowired
     private StreamService streamService;
     @GetMapping(value = "/all", produces = MediaTypes.HAL_JSON_VALUE)
-    public List<Stream> getAll(){
+    public List<RStream> getAll(){
         logger.info("getAll called");
         return streamService.getAll();
     }
     @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public Stream getStream(@PathVariable int id){
+    public RStream getStream(@PathVariable int id){
         logger.info("getStream called. ID: " + id);
         return streamService.getStream(id);
     }

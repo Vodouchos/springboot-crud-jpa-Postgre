@@ -11,7 +11,7 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor
 @Entity
 @Table(name = "streams")
-public class Stream extends RepresentationModel {
+public class RStream extends RepresentationModel {
     @Id
     @GeneratedValue
     private int id;
@@ -19,7 +19,7 @@ public class Stream extends RepresentationModel {
     @Column(unique = true)
     private String url;
 
-    public Stream(String name, String url){
+    public RStream(String name, String url){
         this.name=name;
         this.url=url;
     }
