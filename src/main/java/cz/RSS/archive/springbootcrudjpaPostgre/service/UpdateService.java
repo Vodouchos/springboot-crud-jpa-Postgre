@@ -29,7 +29,7 @@ public class UpdateService {
     public void updateRSSItemRepository(int id){
         streamRepo.findById(id).ifPresent(this::updateRSSItemRepository);
     };
-    public void updateRSSItemRepository(RStream stream){
+    private void updateRSSItemRepository(RStream stream){
         try {
             SyndFeedInput input = new SyndFeedInput();
             SyndFeed feed = input.build(new XmlReader(new URL(stream.getUrl())));
@@ -41,7 +41,11 @@ public class UpdateService {
 
             System.out.println("RSS " + stream.getName() + " loaded. Initializing update. StreamId: " +streamId + " newestEntry: " + newestDBEntry);
             //todo logging
-            //todo write all new items in db
+            feed.getEntries()
+                    .stream()
+                    .takeWhile(x -> x.getPublishedDate().after(newestDBEntry))
+                    .forEach(x -> itemRepo.save(new RSSItem(streamId,x)));
+            System.out.println("RSS " + stream.getName() + " saved to DB.");
 
         }
         catch (Exception ex) {
