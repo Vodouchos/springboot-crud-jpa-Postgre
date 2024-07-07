@@ -1,5 +1,6 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.model;
 
+import com.rometools.rome.feed.synd.SyndEntry;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +28,12 @@ public class RSSItem {
         this.permaLink=permaLink;
         this.thumbLink=thumbLink;
         this.pubDate=pubDate;
+    }
+    public RSSItem(int streamId, SyndEntry entry){
+        this.streamId=streamId;
+        this.title=entry.getTitle();
+        this.permaLink=entry.getUri();
+        this.thumbLink=entry.getEnclosures().get(0).getUrl();
+        this.pubDate=entry.getPublishedDate();
     }
 }
