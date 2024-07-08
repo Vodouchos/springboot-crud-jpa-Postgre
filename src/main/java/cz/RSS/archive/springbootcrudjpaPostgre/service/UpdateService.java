@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class UpdateService {
-    private LocalDateTime lastUpdate;
     @Autowired
     private StreamRepository streamRepo;
     @Autowired
@@ -25,10 +23,10 @@ public class UpdateService {
 
     public void updateRSSItemRepository(){
         streamRepo.findAll().forEach(this::updateRSSItemRepository);
-    };
+    }
     public void updateRSSItemRepository(int id){
         streamRepo.findById(id).ifPresent(this::updateRSSItemRepository);
-    };
+    }
     private void updateRSSItemRepository(RStream stream){
         try {
             SyndFeedInput input = new SyndFeedInput();
