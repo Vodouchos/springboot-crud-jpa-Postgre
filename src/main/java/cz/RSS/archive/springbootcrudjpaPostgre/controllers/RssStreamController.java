@@ -32,8 +32,8 @@ public class RssStreamController {
     @PostMapping(value = "/addstream")
     public int addStream(@RequestParam("name") String name, @RequestParam("url") String url){
         logger.info("addStream called. name: " + name + " url: " + url);
-        streamService.addStream(name,url);
-        return 201;
+        return streamService.addStream(name,url);
+
     }
     @PostMapping (value = "/removestream") //Post because basic HTML form does not support delete
     public int removeStream(@RequestParam("id") int id){
