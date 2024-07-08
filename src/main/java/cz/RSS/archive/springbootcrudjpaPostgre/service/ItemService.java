@@ -1,11 +1,11 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.service;
 
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RSSItem;
-import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -16,5 +16,8 @@ public class ItemService {
 
     public List<RSSItem> getAll(){
         return itemRepo.findAll();
+    }
+    public List<RSSItem> getSelection(Integer[] streamIds){
+        return itemRepo.findByStreamIdIn(Arrays.asList(streamIds));
     }
 }
