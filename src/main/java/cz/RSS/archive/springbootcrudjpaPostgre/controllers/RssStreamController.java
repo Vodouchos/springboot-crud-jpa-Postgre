@@ -35,7 +35,7 @@ public class RssStreamController {
         streamService.addStream(name,url);
         return 201;
     }
-    @PostMapping (value = "/removestream") //basic HTML form does not allow delete
+    @PostMapping (value = "/removestream") //Post because basic HTML form does not support delete
     public int removeStream(@RequestParam("id") int id){
         logger.info("removeStream called. id: " + id);
         streamService.removeStream(id);
