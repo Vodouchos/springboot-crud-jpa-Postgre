@@ -1,12 +1,17 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.controllers;
 
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RSSItem;
-import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.service.ItemService;
+import cz.RSS.archive.springbootcrudjpaPostgre.service.UpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -14,15 +19,17 @@ import java.util.List;
 public class RssItemsController {
     @Autowired
     private ItemService itemService;
-    @GetMapping(value = "/", produces = MediaTypes.HAL_JSON_VALUE)
-    public List<RSSItem> getAllItems(){
-        return itemService.getAll();
-    }
+    @Autowired
+    private UpdateService updateService;
 
-    //todo get by id, optional update
-//    @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-//    public RSSItem getItem(@PathVariable int id){
-//        return itemRepo.getReferenceById(id);
-//    }
+    @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    public List<RSSItem> getItems(@RequestParam(name = "update", required = false) String updateString,
+                                  @RequestParam(name = "streamId", required = false) List<Integer> streamId){
+        boolean update = Boolean.parseBoolean(updateString);
+        boolean all = CollectionUtils.isEmpty(streamId);
+        if (update) streamId.forEach(updateService::updateRSSItemRepository);
+        if (all)  return itemService.getAll();
+        return itemService.getSelection(streamId);
+    }
 
 }
