@@ -4,11 +4,13 @@ import com.rometools.rome.feed.synd.SyndEntry;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "items")
 public class RSSItem {
