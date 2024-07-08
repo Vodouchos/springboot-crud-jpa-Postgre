@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -27,8 +26,10 @@ public class RssItemsController {
                                   @RequestParam(name = "streamId", required = false) List<Integer> streamId){
         boolean update = Boolean.parseBoolean(updateString);
         boolean all = CollectionUtils.isEmpty(streamId);
-        if (update) streamId.forEach(updateService::updateRSSItemRepository);
-        if (all)  return itemService.getAll();
+        if (update)
+            if (all) updateService.updateRSSItemRepository(); //update all
+                else streamId.forEach(updateService::updateRSSItemRepository); //partial update
+        if (all) return itemService.getAll();
         return itemService.getSelection(streamId);
     }
 
