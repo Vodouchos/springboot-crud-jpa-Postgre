@@ -17,7 +17,7 @@ public class ItemService {
     public List<RSSItem> getAll(){
         return itemRepo.findAll();
     }
-    public List<RSSItem> getSelection(Integer[] streamIds){
-        return itemRepo.findByStreamIdIn(Arrays.asList(streamIds));
+    public List<RSSItem> getSelection(List<Integer> streamIds){
+        return itemRepo.findByStreamIdIn(streamIds);
     }
 }
