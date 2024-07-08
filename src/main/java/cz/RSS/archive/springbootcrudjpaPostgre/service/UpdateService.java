@@ -26,23 +26,23 @@ public class UpdateService {
     public void updateRSSItemRepository(int id){
         streamRepo.findById(id).ifPresent(this::updateRSSItemRepository);
     }
-    private void updateRSSItemRepository(RStream stream){
+    private void updateRSSItemRepository(RStream rStream){
         try {
             SyndFeedInput input = new SyndFeedInput();
-            SyndFeed feed = input.build(new XmlReader(new URL(stream.getUrl())));
+            SyndFeed feed = input.build(new XmlReader(new URL(rStream.getUrl())));
 
-            int streamId = stream.getId();
+            int streamId = rStream.getId();
             Date newestDBEntry = itemRepo.findFirstByStreamIdOrderByPubDateDesc(streamId)
                     .map(RSSItem::getPubDate)//publication date of newest item
                     .orElse(new Date(0L));// if there is no item set to zero
 
-            System.out.println("RSS " + stream.getName() + " loaded. Initializing update. StreamId: " +streamId + " newestEntry: " + newestDBEntry);
+            System.out.println("RSS " + rStream.getName() + " loaded. Initializing update. StreamId: " +streamId + " newestEntry: " + newestDBEntry);
             //todo logging
             feed.getEntries()
                     .stream()
                     .takeWhile(x -> x.getPublishedDate().after(newestDBEntry))
                     .forEach(x -> itemRepo.save(new RSSItem(streamId,x)));
-            System.out.println("RSS " + stream.getName() + " saved to DB.");
+            System.out.println("RSS " + rStream.getName() + " saved to DB.");
             // todo log
         }
         catch (Exception ex) {
