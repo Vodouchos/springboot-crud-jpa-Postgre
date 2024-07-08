@@ -21,20 +21,5 @@ public class RssItemsController {
     public RSSItem getItem(@PathVariable int id){
         return itemRepo.getReferenceById(id);
     }
-    @GetMapping(value = "/update", produces = MediaTypes.HAL_JSON_VALUE)
-    public int update(){
-        // todo
-        return 200;
-    }
-//    @PostMapping(value = "/addstream")
-//    public int addStream(@RequestParam("name") String name, @RequestParam("url") String url){
-//        url = url.replaceFirst("^(https://www\\.|http://www\\.|http://|https://|www\\.)","");
-//        streamRepo.save(new Stream(name,url));
-//        return 200;
-//    }
-//    @PostMapping(value = "/removestream")
-//    public int removeStream(@RequestParam("id") int id){
-//        streamRepo.deleteById(id);
-//        return 200;
-//    }
+
 }

@@ -36,8 +36,8 @@ public class UpdateService {
 
             int streamId = stream.getId();
             Date newestDBEntry = itemRepo.findFirstByStreamIdOrderByPubDateDesc(streamId)
-                    .map(RSSItem::getPubDate)
-                    .orElse(new Date(0L));
+                    .map(RSSItem::getPubDate)//publication date of newest item
+                    .orElse(new Date(0L));// if there is no item set to zero
 
             System.out.println("RSS " + stream.getName() + " loaded. Initializing update. StreamId: " +streamId + " newestEntry: " + newestDBEntry);
             //todo logging
@@ -46,7 +46,7 @@ public class UpdateService {
                     .takeWhile(x -> x.getPublishedDate().after(newestDBEntry))
                     .forEach(x -> itemRepo.save(new RSSItem(streamId,x)));
             System.out.println("RSS " + stream.getName() + " saved to DB.");
-
+            // todo log
         }
         catch (Exception ex) {
             ex.printStackTrace();//todo err handling and logging
