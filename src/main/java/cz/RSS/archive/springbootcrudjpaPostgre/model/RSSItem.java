@@ -19,7 +19,6 @@ public class RSSItem {
     private int id;
     private int streamId;
     private String title;
-    @Column(unique = true)
     private String permaLink;
     private String thumbLink;
     private Date pubDate;
