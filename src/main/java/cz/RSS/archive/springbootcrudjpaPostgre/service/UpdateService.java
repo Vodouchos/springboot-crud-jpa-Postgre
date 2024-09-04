@@ -32,6 +32,13 @@ public class UpdateService {
             return false;
         }
     }
+    public static String returnRawFeed(String url){
+        try {
+            return new SyndFeedInput().build(new XmlReader(new URL(url))).toString();
+        } catch (Exception ex){
+            return "Url invalid as RSS";
+        }
+    }
     public void updateRSSItemRepository(){
         streamRepo.findAll().forEach(this::updateRSSItemRepository);
     }
@@ -57,7 +64,7 @@ public class UpdateService {
 
         }
         catch (Exception ex) {
-            logger.error("ERROR: "+ex.getMessage(), ex);
+            logger.error("RSS id: "+ rStream.getId() + " failed to load feed. Error: "+ex.getMessage(), ex);
         }
     }
 
