@@ -3,6 +3,7 @@ package cz.RSS.archive.springbootcrudjpaPostgre.controllers;
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.service.StreamService;
+import cz.RSS.archive.springbootcrudjpaPostgre.service.UpdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class RssStreamController {
     Logger logger = LoggerFactory.getLogger(RssStreamController.class);
     @Autowired
     private StreamService streamService;
+
     @GetMapping(value = "/all", produces = MediaTypes.HAL_JSON_VALUE)
     public List<RStream> getAll(){
         logger.info("getAll called");
@@ -40,5 +42,10 @@ public class RssStreamController {
         logger.info("removeStream called. id: " + id);
         streamService.removeStream(id);
         return 200;
+    }
+    @PostMapping (value = "/teststream")
+    public String testStream(@RequestParam("url") String url){
+        logger.info("testStream called. url: " + url);
+        return UpdateService.returnRawFeed(url);
     }
 }
