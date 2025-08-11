@@ -13,16 +13,11 @@
     --white: #FFF;
     --web-bg-light: #FFF;
     --web-bg-dark: #000;
-    --neutral05: #F0F2F3;
     --neutral10: #D3D7DA;
-    --neutral20: #B2B9BE;
-    --neutral60: #75868E;
-    --neutral80: #434D52;
     --neutral90: #2B3135;
     --pri05: #EDF2F9;
     --pri10: #D6DEEB;
     --pri20: #A7B9D9;
-    --pri30: #4C70B5;
     --pri60: #1B3E7A;
     --pri80: #122E5B;
     --pri90: #091E3C;
@@ -32,23 +27,11 @@
     --tgl-black: var(--black);
     --tgl-white: var(--white);
     --tgl-web-bg: var(--web-bg-light);
-    --txt-neutral60: var(--neutral60);
     --txt-neutral90: var(--neutral90);
-    --txt-pri60: var(--pri60);
-    --txt-pri80: var(--pri80);
-    --tgl-neutral05: var(--neutral05);
-    --tgl-neutral10: var(--neutral10);
-    --tgl-neutral20: var(--neutral20);
-    --tgl-neutral60: var(--neutral60);
-    --tgl-neutral80: var(--neutral80);
-    --tgl-neutral90: var(--neutral90);
     --tgl-pri05: var(--pri05);
     --tgl-pri10: var(--pri10);
     --tgl-pri20: var(--pri20);
-    --tgl-pri30: var(--pri30);
-    --tgl-pri60: var(--pri60);
     --tgl-pri80: var(--pri80);
-    --tgl-pri90: var(--pri90);
     --tgl-sec60: var(--sec60);
     --tgl-black-o10: var(--black-o10);
     --tgl-white-o10: var(--white-o10);
@@ -58,23 +41,11 @@ html.dark, .sg-page .dark {
     --tgl-black: var(--white);
     --tgl-white: var(--black);
     --tgl-web-bg: var(--web-bg-dark);
-    --txt-neutral60: var(--neutral20);
     --txt-neutral90: var(--white);
-    --txt-pri60: var(--white);
-    --txt-pri80: var(--white);
-    --tgl-neutral05: var(--neutral90);
-    --tgl-neutral10: var(--neutral80);
-    --tgl-neutral20: var(--neutral60);
-    --tgl-neutral60: var(--neutral20);
-    --tgl-neutral80: var(--neutral10);
-    --tgl-neutral90: var(--neutral05);
     --tgl-pri05: var(--pri90);
     --tgl-pri10: var(--pri80);
     --tgl-pri20: var(--pri60);
-    --tgl-pri30: var(--pri30);
-    --tgl-pri60: var(--pri20);
     --tgl-pri80: var(--neutral10);
-    --tgl-pri90: var(--pri05);
     --tgl-sec60: var(--sec60);
     --tgl-black-o10: var(--white-o10);
     --tgl-white-o10: var(--black-o10);
@@ -118,7 +89,7 @@ h3 {
 }
 
 /* Navigation */
-.iph {
+.head {
     position: relative;
     z-index: 4999;
     margin: 0 0 1.5rem;
@@ -128,7 +99,7 @@ h3 {
     box-sizing: border-box;
 }
 
-.iph:after {
+.head:after {
     content: '';
     position: absolute;
     left: 18px;
@@ -138,21 +109,21 @@ h3 {
     background: var(--tgl-pri10);
 }
 
-.m-bg-4 .iph:after {
+.m-bg-4 .head:after {
     left: 33px;
     right: 33px;
 }
 
-.iph a {
+.head a {
     color: var(--tgl-pri80);
 }
 
-.iph li {
+.head li {
     position: relative;
     display: block;
 }
 
-.iph-menu1 {
+.menu1 {
     position: relative;
     z-index: 1;
     display: flex;
@@ -166,7 +137,7 @@ h3 {
     white-space: nowrap;
 }
 
-.iph-menu1:before {
+.menu1:before {
     content: '';
     position: absolute;
     left: 0;
@@ -176,22 +147,22 @@ h3 {
     background: var(--tgl-pri10);
 }
 
-.iph-menu1 > li {
+.menu1 > li {
     flex: 0 0 auto;
 }
 
-.iph-menu1 a {
+.menu1 a {
     position: relative;
     display: block;
     padding: 0 .5em;
     text-decoration: none;
 }
 
-.iph-menu1 a:hover {
+.menu1 a:hover {
     text-decoration: none;
 }
 
-.iph-menu1 a:after {
+.menu1 a:after {
     content: '';
     position: absolute;
     left: 0;
@@ -201,15 +172,15 @@ h3 {
     background: transparent;
 }
 
-.iph-menu1 a:hover:after {
+.menu1 a:hover:after {
     background: var(--tgl-pri20);
 }
 
-.iph-menu1 .active a:after {
+.menu1 .active a:after {
     background: var(--tgl-sec60);
 }
 
-.iph-menu2 {
+.menu2 {
 position: absolute;
     top: 100%;
     left: 0;
@@ -229,53 +200,41 @@ position: absolute;
     backdrop-filter: blur(5px);
 }
 
-.dark .iph-menu2 {
+.dark .menu2 {
     background: rgba(0, 0, 0, .9);
 }
 
-.iph-more .iph-menu2 {
-    display: none;
-    left: auto;
-    right: 0;
-    max-height: none;
-    white-space: normal;
-    transition: none;
-}
-
-li:hover .iph-menu2, .iph-more.active .iph-menu2 {
+li:hover .menu2 {
     padding: .5rem 0;
     border-width: 1px;
     box-shadow: 0 .5rem 1rem var(--tgl-black-o10);
 }
 
-li:hover .iph-menu2 {
+li:hover .menu2 {
     max-height: 29.75rem;
 }
 
-.iph-more:hover .iph-menu2, .iph-more.active .iph-menu2 {
-    display: block;
-}
 
-.iph-menu2 a {
+.menu2 a {
     padding: .5rem 1rem;
 }
 
-.iph-menu2 a:hover {
+.menu2 a:hover {
     background: var(--tgl-pri05);
 }
 
-.iph-menu2 a:after {
+.menu2 a:after {
     display: none;
 }
 
-#iph {
+#head {
     position: sticky;
     top: -10rem;
     z-index: 99;
     transition: box-shadow 1s;
 }
 
-#iph.shadow {
+#head.shadow {
     box-shadow: 0 .5rem 1rem var(--tgl-black-o10);
 }
 
@@ -335,7 +294,7 @@ li:hover .iph-menu2 {
     width: var(--art-img-w);
     height: var(--art-img-h);
     color: #FFF;
-    background: url('/u/idn4/obrazek-neni-k-dispozici.png') no-repeat 50% 50% / cover;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg') no-repeat 50% 50% / cover;
 }
 
 .art u {
