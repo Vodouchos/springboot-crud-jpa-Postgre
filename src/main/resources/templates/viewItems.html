@@ -1,10 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        @import "../styles.css";
+    </style>
+
+
 </head>
 <body>
+<div id="main">
+    <div class="iph" id="iph">
+        <ul class="iph-menu1" id="iph-row3">
+            <li><a href="https://www.idnes.cz/zpravy" title="Zprávy">Zprávy</a>
+                <ul class="iph-menu2">
+                    <li><a href="https://www.idnes.cz/zpravy/domaci" title="Domácí">Domácí</a></li>
+                    <li><a href="https://www.idnes.cz/zpravy/zahranicni" title="Zahraničí">Zahraničí</a></li>
+                </ul>
+            </li>
+            <li><a href="https://www.idnes.cz/kraje" title="Kraje">Kraje</a>
+                <ul class="iph-menu2">
+                    <li><a href="https://www.idnes.cz/praha" title="Praha a střední Čechy">Praha a střední Čechy</a>
+                    </li>
+                    <li><a href="https://www.idnes.cz/brno" title="Brno">Brno</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="content" class="content">
+        <div class="col-a">
+            <div id="articles-to-change">
+                <div class="art  ">
+                    <a href="https://www.idnes.cz/hobby/mazlicci/velekrysa-nejvetsi-mys-na-svete-cesky-vedec-nova-guinea.A250516_092701_hobby-mazlicci_mce"
+                       class="art-link">
+                        <h3>
+                            Český vědec jako první vyfotil tajemnou huňatou velekrysu, měří téměř metr
+                        </h3>
+                        <div class="art-img">
+                            <u class="odklad "
+                               style="background-image: url(//1gr.cz/fotky/idnes/25/052/w230/MCE586730d567_FV_a_velekrysa.jpg)"
+                               title="Doktorand Jihočesk&#233; univerzity František Vejmělka se sv&#253;m vědeck&#253;m &#250;lovkem:..."></u>
+                        </div>
+                    </a>
+                    <p>
+                        Obří krysa měří 85 cm, váží téměř 2 kg, jde o největšího hlodavce Austrálie a Oceánie a mladý
+                        český vědec František Vejmělka ji jako první na světě zdokumentoval na tropickém ostrově Nová
+                        Guinea....
+                    </p>
 
+                </div>
+                <div class="art  ">
+                    <a href="https://www.idnes.cz/finance/prace-a-podnikani/farma-skodovi-chov-skotu-zemedelstvi-agroscan.A250515_073626_podnikani_sov"
+                       class="art-link">
+                        <h3>
+                            Vsadil na jedinečné maso a vybudoval prosperující farmu známou nejen na Moravě
+                        </h3>
+                        <div class="art-img">
+                            <u class="odklad "
+                               style="background-image: url(//1gr.cz/fotky/idnes/25/052/w230/SOV4ce854232a_vitezslav_skoda_2.jpg)"
+                               title="Farma Škodovi"></u>
+                        </div>
+                    </a>
+                    <p>
+                        Vítězslav Škoda vyrůstal na rodinné farmě. Po roce 1989 si jeho otec vzal do užívání rodinné
+                        pozemky a navázal na práci předků, kterou nuceně ukončila kolektivizace. „Bylo to období
+                        budování od...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
