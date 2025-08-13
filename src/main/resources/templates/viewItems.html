@@ -31,41 +31,16 @@
     <div id="content" class="content">
         <div class="col-a">
             <div id="articles-to-change">
-                <div class="art  ">
-                    <a href="https://www.idnes.cz/hobby/mazlicci/velekrysa-nejvetsi-mys-na-svete-cesky-vedec-nova-guinea.A250516_092701_hobby-mazlicci_mce"
+                <div th:each="RSSItem:${items}" class="art">
+                    <a th:href="@{${RSSItem.permaLink}}"
                        class="art-link">
-                        <h3>
-                            Český vědec jako první vyfotil tajemnou huňatou velekrysu, měří téměř metr
-                        </h3>
+                        <h3 th:text="${RSSItem.title}"></h3>
                         <div class="art-img">
-                            <u class="odklad "
-                               style="background-image: url(//1gr.cz/fotky/idnes/25/052/w230/MCE586730d567_FV_a_velekrysa.jpg)"
-                               title="Doktorand Jihočesk&#233; univerzity František Vejmělka se sv&#253;m vědeck&#253;m &#250;lovkem:..."></u>
+                            <u th:style="'background-image: url(' + @{${RSSItem.thumbLink}} + ')'"
+                               th:title="${RSSItem.title}"></u>
                         </div>
                     </a>
-                    <p>
-                        Obří krysa měří 85 cm, váží téměř 2 kg, jde o největšího hlodavce Austrálie a Oceánie a mladý
-                        český vědec František Vejmělka ji jako první na světě zdokumentoval na tropickém ostrově Nová
-                        Guinea....
-                    </p>
-
-                </div>
-                <div class="art  ">
-                    <a href="https://www.idnes.cz/finance/prace-a-podnikani/farma-skodovi-chov-skotu-zemedelstvi-agroscan.A250515_073626_podnikani_sov"
-                       class="art-link">
-                        <h3>
-                            Vsadil na jedinečné maso a vybudoval prosperující farmu známou nejen na Moravě
-                        </h3>
-                        <div class="art-img">
-                            <u class="odklad "
-                               style="background-image: url(//1gr.cz/fotky/idnes/25/052/w230/SOV4ce854232a_vitezslav_skoda_2.jpg)"
-                               title="Farma Škodovi"></u>
-                        </div>
-                    </a>
-                    <p>
-                        Vítězslav Škoda vyrůstal na rodinné farmě. Po roce 1989 si jeho otec vzal do užívání rodinné
-                        pozemky a navázal na práci předků, kterou nuceně ukončila kolektivizace. „Bylo to období
-                        budování od...
+                    <p th:text="${RSSItem.text}">
                     </p>
                 </div>
             </div>

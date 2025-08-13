@@ -21,13 +21,15 @@ public class RSSItem {
     private String title;
     private String permaLink;
     private String thumbLink;
+    private String text;
     private Date pubDate;
 
-    public RSSItem(int streamId, String title, String permaLink, String thumbLink, Date pubDate){
+    public RSSItem(int streamId, String title, String permaLink, String thumbLink,String text, Date pubDate){
         this.streamId=streamId;
         this.title=title;
         this.permaLink=permaLink;
         this.thumbLink=thumbLink;
+        this.text=text;
         this.pubDate=pubDate;
     }
     public RSSItem(int streamId, SyndEntry entry){
@@ -35,6 +37,7 @@ public class RSSItem {
         this.title=entry.getTitle();
         this.permaLink=entry.getUri();
         this.thumbLink=entry.getEnclosures().get(0).getUrl();
+        this.text=entry.getDescription().getValue();
         this.pubDate=entry.getPublishedDate();
     }
 }

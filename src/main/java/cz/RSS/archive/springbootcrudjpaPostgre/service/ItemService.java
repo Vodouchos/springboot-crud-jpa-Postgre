@@ -23,6 +23,6 @@ public class ItemService {
     }
     public List<RSSItem> getSelection(List<Integer> streamIds){
         logger.info("getting items of streams: " + streamIds);
-        return itemRepo.findByStreamIdIn(streamIds);
+        return itemRepo.findByStreamIdInOrderByPubDateDesc(streamIds);
     }
 }

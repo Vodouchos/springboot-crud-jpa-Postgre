@@ -10,7 +10,7 @@ import java.util.Optional;
 @RepositoryRestResource
 public interface ItemRepository extends JpaRepository<RSSItem, Integer> {
     Optional<RSSItem> findFirstByStreamIdOrderByPubDateDesc(int streamId);
-    List<RSSItem> findByStreamIdIn(List<Integer> streamId);
+    List<RSSItem> findByStreamIdInOrderByPubDateDesc(List<Integer> streamId);
 
     void deleteByStreamId(int streamId);
 }
