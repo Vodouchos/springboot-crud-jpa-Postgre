@@ -1,8 +1,9 @@
 /* Custom Properties */
 :root {
-    --art-h3: 125%;
+    --art-h3: 100%;
     --art-img-w: 210px;
     --art-img-h: 120px;
+    --col-width: 100%;
     --col-margin: 18px;
     --spacing-2: 2rem;
     --spacing-025: .25rem;
@@ -252,9 +253,10 @@ li:hover .menu2 {
 }
 
 .col-a {
-    float: left;
-    width: 632px;
-    margin: 0 0 0 var(--col-margin);
+    float: none;
+    width: var(--col-width);
+    max-width: 632px;
+    margin: 0 auto;
 }
 
 /* Article Styles */
@@ -286,7 +288,7 @@ li:hover .menu2 {
     text-decoration: underline;
 }
 
-.art .art-img {
+.art .art-img-box {
     position: absolute;
     top: 0;
     left: 0;
@@ -297,25 +299,37 @@ li:hover .menu2 {
     background: url('https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg') no-repeat 50% 50% / 100%;
 }
 
-.art u {
+.art .art-img {
     display: block;
-    width: 210px;
-    height: 120px;
-    background: transparent no-repeat 50% 50% / auto 100%;
+    width: var(--art-img-w);
+    height: var(--art-img-h);
+    background: transparent no-repeat 50% 50% / contain;
 }
 
 .art p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 4;
     overflow: hidden;
-    font-size: 87.5%;
+    font-size: 85%;
     line-height: 1.4;
 }
 
 /* Responsive Adjustments */
-@media screen and (min-width: 389px) and (max-width: 1680px) {
+@media screen and (max-width: 389px) {
     :root {
-        --art-h3: 106.25%;
+        --art-img-w: 100vw;
+        --art-img-h: auto;
+        --col-width: 100vw;
+    }
+    .art {
+        padding: 0 0 8px var(--spacing-075); /* Remove image-based padding */
+    }
+    .art-img {
+        position: relative; /* Stack normally on small screens */
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9; /* Maintain aspect ratio */
     }
 }
+

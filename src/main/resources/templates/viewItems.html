@@ -34,9 +34,9 @@
                 <a th:href="@{${RSSItem.permaLink}}"
                    class="art-link">
                     <h3 th:text="${RSSItem.title}"></h3>
-                    <div class="art-img">
-                        <u th:style="'background-image: url(' + @{${RSSItem.thumbLink}} + ')'"
-                           th:title="${RSSItem.title}"></u>
+                    <div class="art-img-box">
+                        <div class="art-img" th:style="'background-image: url(' + @{${RSSItem.thumbLink}} + ')'"
+                           th:title="${RSSItem.title}"></div>
                     </div>
                 </a>
                 <p th:text="${RSSItem.text}">
