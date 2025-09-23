@@ -239,74 +239,64 @@ li:hover .menu2 {
     box-shadow: 0 .5rem 1rem var(--tgl-black-o10);
 }
 
-/* Content Layout */
-.content {
+
+
+/* Responsive Adjustments */
+
+.article-container {
+    display: flex;
+    max-width: 800px;
+    margin: 5px auto;
+    border: 1px solid #ddd;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.article-image-container {
     position: relative;
-    clear: both;
-    margin-bottom: 20px;
+    margin-right: 20px;
 }
 
-#content:after {
-    content: '';
+.article-image {
+    width: auto;
+    height: 120px;
     display: block;
-    clear: both;
 }
 
-.col-a {
-    float: none;
-    width: var(--col-width);
-    max-width: 632px;
-    margin: 0 auto;
+.publish-date {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    margin-right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 5px 8px;
+    font-size: 0.8em;
+    border-radius: 3px;
+    border: 1px solid #fff;
 }
 
-/* Article Styles */
-.art {
-    position: relative;
-    min-height: var(--art-img-h);
-    margin: 0 0 var(--spacing-075);
-    padding: 0 0 8px calc(var(--art-img-w) + var(--spacing-075));
-    box-sizing: border-box;
-    overflow-wrap: break-word;
+.article-content {
+    flex: 1;
 }
 
-.art h3 {
-    display: block;
-    margin: 0 0 var(--spacing-025) -12px;
-    padding: 0 0 0 12px;
-    font-weight: 600;
-    font-size: var(--art-h3);
-    line-height: 1.2;
+.article-title {
+    margin: 0 0 5px;
 }
 
-.art-link {
-    color: var(--tgl-pri80);
-    outline: none;
+.article-title h3 {
     text-decoration: none;
+    font-family: var(--ff-h);
+    font-weight: 600;
+    var(--tgl-pri80);
 }
 
-.art-link:hover h3 {
+.article-title a:hover {
     text-decoration: underline;
 }
 
-.art .art-img-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    width: var(--art-img-w);
-    height: var(--art-img-h);
-    color: #FFF;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg') no-repeat 50% 50% / 100%;
-}
-
-.art .art-img {
-    display: block;
-    width: var(--art-img-w);
-    height: var(--art-img-h);
-    background: transparent no-repeat 50% 50% / contain;
-}
-
-.art p {
+.article-summary {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
@@ -315,21 +305,13 @@ li:hover .menu2 {
     line-height: 1.4;
 }
 
-/* Responsive Adjustments */
-@media screen and (max-width: 389px) {
-    :root {
-        --art-img-w: 100vw;
-        --art-img-h: auto;
-        --col-width: 100vw;
+@media (max-width: 600px) {
+    .article-container {
+        flex-direction: column;
     }
-    .art {
-        padding: 0 0 8px var(--spacing-075); /* Remove image-based padding */
-    }
-    .art-img {
-        position: relative; /* Stack normally on small screens */
-        width: 100%;
-        height: auto;
-        aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+
+    .article-image {
+        margin-right: 0;
+        margin-bottom: 10px;
     }
 }
-
