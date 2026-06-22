@@ -14,9 +14,9 @@ public class ThymeleafController {
 
     @Autowired
     private ItemService itemService;
-    @GetMapping("/view")
+    @GetMapping("/news")
     public String getSelected(Model model){
         model.addAttribute("items", itemService.getSelection(List.of(1)));
-        return "viewItems";
+        return "viewNews";
     }
 }

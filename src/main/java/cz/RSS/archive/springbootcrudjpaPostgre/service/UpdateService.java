@@ -1,5 +1,6 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.service;
 
+import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
@@ -14,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UpdateService {
@@ -45,26 +49,59 @@ public class UpdateService {
     public void updateRSSItemRepository(int id){
         streamRepo.findById(id).ifPresent(this::updateRSSItemRepository);
     }
-    private void updateRSSItemRepository(RStream rStream){
+    private void updateRSSItemRepository(RStream rStream) {
         try {
             SyndFeedInput input = new SyndFeedInput();
             SyndFeed feed = input.build(new XmlReader(new URL(rStream.getUrl())));
 
             int streamId = rStream.getId();
-            Date newestDBEntry = itemRepo.findFirstByStreamIdOrderByPubDateDesc(streamId)
-                    .map(RSSItem::getPubDate)//publication date of newest item
-                    .orElse(new Date(0L));// if there is no item set to zero
+            Optional<RSSItem> newestItem = itemRepo.findFirstByStreamIdOrderByPubDateDesc(streamId);
+            Date newestDBEntry = newestItem.map(RSSItem::getPubDate).orElse(new Date(0L));
 
-            logger.info("RSS " + rStream.getName() + " loaded. Initializing update. StreamId: " +streamId + " newestEntry: " + newestDBEntry);
-            feed.getEntries()
-                    .stream()
-                    .takeWhile(x -> x.getPublishedDate().after(newestDBEntry))
-                    .forEach(x -> itemRepo.save(new RSSItem(streamId,x)));
-            logger.info("New entries of RSS " + rStream.getName() + " saved to DB.");
+            logger.info("RSS " + rStream.getName() + " loaded. Initializing update. StreamId: " + streamId + " newestEntry: " + newestDBEntry);
 
-        }
-        catch (Exception ex) {
-            logger.error("RSS id: "+ rStream.getId() + " failed to load feed. Error: "+ex.getMessage(), ex);
+            List<SyndEntry> newEntries = new java.util.ArrayList<>(feed.getEntries().stream()
+                    .filter(x -> x.getPublishedDate().after(newestDBEntry))
+                    .sorted(Comparator.comparing(SyndEntry::getPublishedDate).reversed())
+                    .toList());
+            if (!newEntries.isEmpty() && newestItem.isPresent()){
+                // newEntries.get(0).getUri() funguje pro ČTK
+                if (newEntries.get(0).getUri().equals(newestItem.get().getPermaLink())){
+                    newEntries.remove(0);
+                }
+            }
+
+            for (SyndEntry entry : newEntries) {itemRepo.save(new RSSItem(streamId, entry));}
+
+            for (SyndEntry entry : newEntries) {
+                int retryCount = 0;
+                int maxRetries = 100;
+                boolean saved = false;
+                Date pubDate = entry.getPublishedDate();
+
+                while (!saved && retryCount < maxRetries) {
+                    try {
+                        itemRepo.save(new RSSItem(streamId, entry));
+                        saved = true;
+                    } catch (Exception ex) {
+                        if (ex.getMessage().contains("duplicate key")) {
+                            retryCount++;
+                            entry.setPublishedDate(new Date(entry.getPublishedDate().getTime() + 1));
+                            logger.info("Duplicate key for RSS item in stream " + rStream.getName() +
+                                    ". Retrying with adjusted pubDate: " + entry.getPublishedDate() +
+                                    ". Attempt: " + (retryCount + 1));
+                        } else {
+                            throw ex; // Rethrow if not a duplicate key or max retries reached
+                        }
+                    }
+                }
+                if (!saved) logger.error("Failed to save RSS item for stream " + rStream.getName() + " after " + maxRetries + " attempts with pubDate: " + pubDate);
+            }
+
+            logger.info("New entries of RSS " + rStream.getName() + " saved to DB. Count: " + newEntries.size());
+
+        } catch (Exception ex) {
+            logger.error("RSS id: " + rStream.getId() + " failed to load feed. Error: " + ex.getMessage(), ex);
         }
     }
 

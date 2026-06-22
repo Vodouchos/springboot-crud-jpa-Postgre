@@ -14,24 +14,14 @@ import java.util.Date;
 @Entity
 @Table(name = "items")
 public class RSSItem {
-    @Id
-    @GeneratedValue
-    private int id;
     private int streamId;
     private String title;
     private String permaLink;
     private String thumbLink;
     private String text;
+    @Id
     private Date pubDate;
 
-    public RSSItem(int streamId, String title, String permaLink, String thumbLink,String text, Date pubDate){
-        this.streamId=streamId;
-        this.title=title;
-        this.permaLink=permaLink;
-        this.thumbLink=thumbLink;
-        this.text=text;
-        this.pubDate=pubDate;
-    }
     public RSSItem(int streamId, SyndEntry entry){
         this.streamId=streamId;
         this.title=entry.getTitle();
