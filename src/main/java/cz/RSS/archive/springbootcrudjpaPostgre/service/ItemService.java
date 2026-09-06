@@ -3,18 +3,17 @@ package cz.RSS.archive.springbootcrudjpaPostgre.service;
 import cz.RSS.archive.springbootcrudjpaPostgre.controllers.RssStreamController;
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RSSItem;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ItemService {
-
-    @Autowired
-    private ItemRepository itemRepo;
+    private final ItemRepository itemRepo;
     Logger logger = LoggerFactory.getLogger(RssStreamController.class);
 
     public List<RSSItem> getAll(){

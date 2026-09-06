@@ -9,9 +9,10 @@ import cz.RSS.archive.springbootcrudjpaPostgre.model.RSSItem;
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
@@ -21,11 +22,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UpdateService {
-    @Autowired
-    private StreamRepository streamRepo;
-    @Autowired
-    private ItemRepository itemRepo;
+    private final StreamRepository streamRepo;
+    private final ItemRepository itemRepo;
     Logger logger = LoggerFactory.getLogger(RssStreamController.class);
 
     public static boolean validURL(String url){
@@ -61,41 +61,24 @@ public class UpdateService {
             logger.info("RSS " + rStream.getName() + " loaded. Initializing update. StreamId: " + streamId + " newestEntry: " + newestDBEntry);
 
             List<SyndEntry> newEntries = new java.util.ArrayList<>(feed.getEntries().stream()
-                    .filter(x -> x.getPublishedDate().after(newestDBEntry))
+                    .filter(x -> !x.getPublishedDate().before(newestDBEntry))
                     .sorted(Comparator.comparing(SyndEntry::getPublishedDate).reversed())
                     .toList());
             if (!newEntries.isEmpty() && newestItem.isPresent()){
-                // newEntries.get(0).getUri() funguje pro ČTK
+                // newEntries.get(0).getUri() works for ČTK other may be different
                 if (newEntries.get(0).getUri().equals(newestItem.get().getPermaLink())){
                     newEntries.remove(0);
                 }
             }
 
-            for (SyndEntry entry : newEntries) {itemRepo.save(new RSSItem(streamId, entry));}
-
             for (SyndEntry entry : newEntries) {
-                int retryCount = 0;
-                int maxRetries = 100;
-                boolean saved = false;
-                Date pubDate = entry.getPublishedDate();
-
-                while (!saved && retryCount < maxRetries) {
-                    try {
-                        itemRepo.save(new RSSItem(streamId, entry));
-                        saved = true;
-                    } catch (Exception ex) {
-                        if (ex.getMessage().contains("duplicate key")) {
-                            retryCount++;
-                            entry.setPublishedDate(new Date(entry.getPublishedDate().getTime() + 1));
-                            logger.info("Duplicate key for RSS item in stream " + rStream.getName() +
-                                    ". Retrying with adjusted pubDate: " + entry.getPublishedDate() +
-                                    ". Attempt: " + (retryCount + 1));
-                        } else {
-                            throw ex; // Rethrow if not a duplicate key or max retries reached
-                        }
-                    }
+                try {
+                    itemRepo.save(new RSSItem(streamId, entry));
+                } catch (DataIntegrityViolationException ex){
+                    //Duplicit item may rarely slip by (same Permalink - unique col)
+                    logger.info("Duplicit item skipped: " + entry.getUri());
                 }
-                if (!saved) logger.error("Failed to save RSS item for stream " + rStream.getName() + " after " + maxRetries + " attempts with pubDate: " + pubDate);
+
             }
 
             logger.info("New entries of RSS " + rStream.getName() + " saved to DB. Count: " + newEntries.size());

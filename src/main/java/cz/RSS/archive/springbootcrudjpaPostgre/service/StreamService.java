@@ -4,21 +4,20 @@ import cz.RSS.archive.springbootcrudjpaPostgre.controllers.RssStreamController;
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class StreamService {
-    @Autowired
-    private StreamRepository streamRepo;
-    @Autowired
-    private ItemRepository itemRepo;
+    private final StreamRepository streamRepo;
+    private final ItemRepository itemRepo;
     Logger logger = LoggerFactory.getLogger(RssStreamController.class);
 
     public List<RStream> getAll(){

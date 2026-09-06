@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "streams")
 public class RStream {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @Column(unique = true)

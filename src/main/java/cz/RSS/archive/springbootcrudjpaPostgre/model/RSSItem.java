@@ -14,12 +14,15 @@ import java.util.Date;
 @Entity
 @Table(name = "items")
 public class RSSItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private int streamId;
     private String title;
+    @Column(unique = true)
     private String permaLink;
     private String thumbLink;
     private String text;
-    @Id
     private Date pubDate;
 
     public RSSItem(int streamId, SyndEntry entry){

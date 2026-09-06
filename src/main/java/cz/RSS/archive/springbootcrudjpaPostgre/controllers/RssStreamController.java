@@ -4,22 +4,21 @@ import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.service.StreamService;
 import cz.RSS.archive.springbootcrudjpaPostgre.service.UpdateService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/streams")
 public class RssStreamController {
-    @Autowired
-    private StreamRepository streamRepo;
+    private final StreamRepository streamRepo;
+    private final StreamService streamService;
     Logger logger = LoggerFactory.getLogger(RssStreamController.class);
-    @Autowired
-    private StreamService streamService;
 
     @GetMapping(value = "/all", produces = MediaTypes.HAL_JSON_VALUE)
     public List<RStream> getAll(){
