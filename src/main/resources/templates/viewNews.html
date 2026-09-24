@@ -33,7 +33,10 @@
                 <a th:href="@{${RSSItem.permaLink}}">
                     <img th:src="@{${RSSItem.thumbLink}}" th:title="${RSSItem.title}" alt="Article Image" class="article-image"
                          onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';">
-                    <span class="publish-date" th:text="${#dates.day(RSSItem.pubDate) == #dates.day(#dates.createToday()) and #dates.month(RSSItem.pubDate) == #dates.month(#dates.createToday()) and #dates.year(RSSItem.pubDate) == #dates.year(#dates.createToday())} ? ${#dates.format(RSSItem.pubDate, 'HH:mm')} : ${#dates.format(RSSItem.pubDate, 'dd. MM. YYYY')}"></span>
+                    <span class="publish-date"
+                          th:text="${(#dates.createToday().getTime() - RSSItem.pubDate.getTime()) < 86400000}
+                                   ? ${#dates.format(RSSItem.pubDate, 'HH:mm')}
+                                   : ${#dates.format(RSSItem.pubDate, 'dd. MM. YYYY')}"></span>
                 </a>
             </div>
             <div class="article-content">
