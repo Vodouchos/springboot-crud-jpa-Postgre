@@ -311,7 +311,7 @@ li:hover .menu2 {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    margin: 2rem auto;
+    margin: 0.5 rem auto 2 rem;
     font-family: var(--ff-m);
     font-size: 1rem;
 }
