@@ -27,13 +27,13 @@
         </ul>
     </div>
 
-    <div th:if="${currentPage != null}" class="pagination-container">
+    <div th:if="${currentPage != null}" class="pagination-container" th:fragment="pagination">
         <a th:if="${currentPage > 1}"
-           th:href="@{/news-paged(page=${currentPage - 1})}"
+           th:href="@{/news(page=${currentPage - 1})}"
            class="btn-prev">Previous</a>
-        <span th:text="'Strana ' + ${currentPage} + ' z ' + ${totalPages}" ></span>
+        <span th:text="'Page ' + ${currentPage} + ' of ' + ${totalPages}" ></span>
         <a th:if="${currentPage < totalPages}"
-           th:href="@{/news-paged(page=${currentPage + 1})}"
+           th:href="@{/news(page=${currentPage + 1})}"
            class="btn-next">Next</a>
     </div>
 
@@ -55,6 +55,8 @@
             </div>
         </div>
     </div>
+
+    <div th:replace="~{::pagination}"></div>
 </div>
 </body>
 </html>
