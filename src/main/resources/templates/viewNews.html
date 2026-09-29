@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
     <link rel="stylesheet" href="../styles.css" />
-
-
 </head>
+
 <body>
 <div id="main">
     <div class="head" id="head">
@@ -27,6 +26,17 @@
             </li>
         </ul>
     </div>
+
+    <div th:if="${currentPage != null}" class="pagination-container">
+        <a th:if="${currentPage > 1}"
+           th:href="@{/news-paged(page=${currentPage - 1})}"
+           class="btn-prev">Previous</a>
+        <span th:text="'Strana ' + ${currentPage} + ' z ' + ${totalPages}" ></span>
+        <a th:if="${currentPage < totalPages}"
+           th:href="@{/news-paged(page=${currentPage + 1})}"
+           class="btn-next">Next</a>
+    </div>
+
     <div id="content" class="content">
         <div th:each="RSSItem:${items}" class="article-container">
             <div class="article-image-container">

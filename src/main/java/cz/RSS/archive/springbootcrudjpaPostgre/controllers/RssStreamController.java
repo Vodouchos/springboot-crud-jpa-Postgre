@@ -16,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/streams")
 public class RssStreamController {
-    private final StreamRepository streamRepo;
     private final StreamService streamService;
     Logger logger = LoggerFactory.getLogger(RssStreamController.class);
 
