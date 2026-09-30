@@ -4,14 +4,12 @@ import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import cz.RSS.archive.springbootcrudjpaPostgre.controllers.RssStreamController;
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RSSItem;
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +19,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UpdateService {
     private final StreamRepository streamRepo;
     private final ItemRepository itemRepo;
-    Logger logger = LoggerFactory.getLogger(RssStreamController.class);
 
     public static boolean validURL(String url){
         try {
@@ -58,7 +56,7 @@ public class UpdateService {
             Optional<RSSItem> newestItem = itemRepo.findFirstByStreamIdOrderByPubDateDesc(streamId);
             Date newestDBEntry = newestItem.map(RSSItem::getPubDate).orElse(new Date(0L));
 
-            logger.info("RSS " + rStream.getName() + " loaded. Initializing update. StreamId: " + streamId + " newestEntry: " + newestDBEntry);
+            log.info("RSS " + rStream.getName() + " loaded. Initializing update. StreamId: " + streamId + " newestEntry: " + newestDBEntry);
 
             List<SyndEntry> newEntries = new java.util.ArrayList<>(feed.getEntries().stream()
                     .filter(x -> !x.getPublishedDate().before(newestDBEntry))
@@ -76,15 +74,15 @@ public class UpdateService {
                     itemRepo.save(new RSSItem(streamId, entry));
                 } catch (DataIntegrityViolationException ex){
                     //Duplicit item may rarely slip by (same Permalink - unique col)
-                    logger.info("Duplicit item skipped: " + entry.getUri());
+                    log.info("Duplicit item skipped: " + entry.getUri());
                 }
 
             }
 
-            logger.info("New entries of RSS " + rStream.getName() + " saved to DB. Count: " + newEntries.size());
+            log.info("New entries of RSS " + rStream.getName() + " saved to DB. Count: " + newEntries.size());
 
         } catch (Exception ex) {
-            logger.error("RSS id: " + rStream.getId() + " failed to load feed. Error: " + ex.getMessage(), ex);
+            log.error("RSS id: " + rStream.getId() + " failed to load feed. Error: " + ex.getMessage(), ex);
         }
     }
 

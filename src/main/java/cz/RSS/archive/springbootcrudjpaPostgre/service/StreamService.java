@@ -1,24 +1,23 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.service;
 
-import cz.RSS.archive.springbootcrudjpaPostgre.controllers.RssStreamController;
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StreamService {
     private final StreamRepository streamRepo;
     private final ItemRepository itemRepo;
-    Logger logger = LoggerFactory.getLogger(RssStreamController.class);
 
     public List<RStream> getAll(){
         return streamRepo.findAll();
@@ -29,23 +28,24 @@ public class StreamService {
     }
     public int addStream(String name, String url){
         if (!UpdateService.validURL(url)) {
-            logger.error("invalid URL: " + url);
+            log.error("invalid URL={}", url);
             return 400;
         }
         try {
             streamRepo.save(new RStream(name,url));
         } catch (ConstraintViolationException ex) {
-            logger.error("Duplicit url: " + url);
+            log.error("Duplicit url={}", url);
             return 400;
         }
         return 201; //case everything OK
     }
+    @Transactional
     public void removeStream(int id){
-        logger.info("Delete Stream entries");
+        log.info("Delete Stream entries");
         itemRepo.deleteByStreamId(id);
-        logger.info("Stream " + id + " entries deleted");
+        log.info("Stream entries deleted streamId={}", id);
         streamRepo.deleteById(id);
-        logger.info("Stream " + id + " deleted");
+        log.info("Stream deleted streamId={}", id);
     }
 
 
