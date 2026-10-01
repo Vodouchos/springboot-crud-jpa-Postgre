@@ -26,6 +26,8 @@ public class ThymeleafController {
     @GetMapping("/news")
     public String getSelectedPaged(Model model, @RequestParam(defaultValue = "1") int page,
                                    @RequestParam(defaultValue = "15") int pageSize) {
+        page = page < 1 ? 1 : page; //only pages 1+
+        pageSize = Math.min(Math.max(pageSize, 5), 100);
         Pageable pageable = PageRequest.of(page - 1, pageSize);//page 1 has index of 0
 
         //TODO: selected instead list of 1

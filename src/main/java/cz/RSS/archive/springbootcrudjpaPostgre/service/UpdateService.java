@@ -56,8 +56,8 @@ public class UpdateService {
             Optional<RSSItem> newestItem = itemRepo.findFirstByStreamIdOrderByPubDateDesc(streamId);
             Date newestDBEntry = newestItem.map(RSSItem::getPubDate).orElse(new Date(0L));
 
-            log.info("RSS " + rStream.getName() + " loaded. Initializing update. StreamId: " + streamId + " newestEntry: " + newestDBEntry);
-
+            log.info("RSS {} loaded. Initializing update. streamId={} newestEntry={}",
+                     rStream.getName(), streamId, newestDBEntry);
             List<SyndEntry> newEntries = new java.util.ArrayList<>(feed.getEntries().stream()
                     .filter(x -> !x.getPublishedDate().before(newestDBEntry))
                     .sorted(Comparator.comparing(SyndEntry::getPublishedDate).reversed())
@@ -74,15 +74,15 @@ public class UpdateService {
                     itemRepo.save(new RSSItem(streamId, entry));
                 } catch (DataIntegrityViolationException ex){
                     //Duplicit item may rarely slip by (same Permalink - unique col)
-                    log.info("Duplicit item skipped: " + entry.getUri());
+                    log.info("Duplicit item skipped: {}", entry.getUri());
                 }
 
             }
 
-            log.info("New entries of RSS " + rStream.getName() + " saved to DB. Count: " + newEntries.size());
+            log.info("New entries of RSS {} saved to DB. Count: {}", rStream.getName(), newEntries.size());
 
         } catch (Exception ex) {
-            log.error("RSS id: " + rStream.getId() + " failed to load feed. Error: " + ex.getMessage(), ex);
+            log.error("RSS id={} failed to load feed", rStream.getId(),ex);
         }
     }
 
