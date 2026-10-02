@@ -1,11 +1,15 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.controllers;
 
+import cz.RSS.archive.springbootcrudjpaPostgre.exeption.DuplicateRssException;
+import cz.RSS.archive.springbootcrudjpaPostgre.exeption.InvalidRssUrlException;
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.service.StreamService;
 import cz.RSS.archive.springbootcrudjpaPostgre.service.UpdateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,18 +32,22 @@ public class RssStreamController {
         return streamService.getStream(id);
     }
     @PostMapping(value = "/addstream")
-    public int addStream(@RequestParam("name") String name, @RequestParam("url") String url){
+    public ResponseEntity<Void> addStream(@RequestParam("name") String name, @RequestParam("url") String url){
         log.info("addStream called. name={} url={}", name, url);
-        return streamService.addStream(name,url);
-
+        try {
+            streamService.addStream(name,url);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+        catch (InvalidRssUrlException e){return ResponseEntity.badRequest().build();}
+        catch (DuplicateRssException e) {return ResponseEntity.status(HttpStatus.CONFLICT).build();}
     }
     @PostMapping (value = "/removestream") //Post because basic HTML form does not support delete
-    public int removeStream(@RequestParam("id") int id){
+    public ResponseEntity<Void> removeStream(@RequestParam("id") int id){
         log.info("removeStream called. id={}", id);
         streamService.removeStream(id);
-        return 200;
+        return ResponseEntity.noContent().build();
     }
-    @PostMapping (value = "/teststream")
+    @PostMapping (value = "/teststream")//TODO remove endpoint - only for testing
     public String testStream(@RequestParam("url") String url){
         log.info("testStream called. url={}", url);
         return UpdateService.returnRawFeed(url);

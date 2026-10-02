@@ -26,15 +26,7 @@ public class UpdateService {
     private final StreamRepository streamRepo;
     private final ItemRepository itemRepo;
 
-    public static boolean validURL(String url){
-        try {
-            new SyndFeedInput().build(new XmlReader(new URL(url)));
-            return true;
-        } catch (Exception ex){
-            return false;
-        }
-    }
-    public static String returnRawFeed(String url){
+    public static String returnRawFeed(String url){//TODO remove - only for testing
         try {
             return new SyndFeedInput().build(new XmlReader(new URL(url))).toString();
         } catch (Exception ex){
