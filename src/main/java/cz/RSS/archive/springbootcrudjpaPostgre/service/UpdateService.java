@@ -10,6 +10,8 @@ import cz.RSS.archive.springbootcrudjpaPostgre.repository.ItemRepository;
 import cz.RSS.archive.springbootcrudjpaPostgre.repository.StreamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +78,10 @@ public class UpdateService {
         } catch (Exception ex) {
             log.error("RSS id={} failed to load feed", rStream.getId(),ex);
         }
+    }
+    @EventListener(ApplicationReadyEvent.class)
+    public void updateOnStartup() {
+        updateRSSItemRepository();
     }
 
 }

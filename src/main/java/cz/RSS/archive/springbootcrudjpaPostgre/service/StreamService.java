@@ -25,6 +25,7 @@ import java.util.Optional;
 public class StreamService {
     private final StreamRepository streamRepo;
     private final ItemRepository itemRepo;
+    private final UpdateService updateService;
 
     public List<RStream> getAll(){
         return streamRepo.findAll();
@@ -39,7 +40,8 @@ public class StreamService {
             throw new InvalidRssUrlException("Invalid URL");
         }
         try {
-            streamRepo.save(new RStream(name,url));
+            RStream stream = streamRepo.save(new RStream(name,url));
+            updateService.updateRSSItemRepository(stream.getId());
         } catch (DataIntegrityViolationException ex) {
             log.error("Feed already exists URL={}", url);
             throw new DuplicateRssException("Feed already exists");
