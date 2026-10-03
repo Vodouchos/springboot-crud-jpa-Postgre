@@ -15,6 +15,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.net.InetAddress;
+import java.net.URI;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.Date;
@@ -43,9 +45,11 @@ public class UpdateService {
     }
     private void updateRSSItemRepository(RStream rStream) {
         try {
-            SyndFeedInput input = new SyndFeedInput();
-            SyndFeed feed = input.build(new XmlReader(new URL(rStream.getUrl())));
-
+            if (!isRssUrlStringValid(rStream.getUrl())){
+                log.error("RSS {} loaded. Initializing update. streamId={}", rStream.getName(), rStream.getId());
+                return;
+            }
+            SyndFeed feed = new SyndFeedInput().build(new XmlReader(new URL(rStream.getUrl())));
             int streamId = rStream.getId();
             Optional<RSSItem> newestItem = itemRepo.findFirstByStreamIdOrderByPubDateDesc(streamId);
             Date newestDBEntry = newestItem.map(RSSItem::getPubDate).orElse(new Date(0L));
@@ -70,17 +74,38 @@ public class UpdateService {
                     //Duplicit item may rarely slip by (same Permalink - unique col)
                     log.info("Duplicit item skipped: {}", entry.getUri());
                 }
-
             }
-
             log.info("New entries of RSS {} saved to DB. Count: {}", rStream.getName(), newEntries.size());
+        } catch (Exception e) {
+            log.error("RSS id={} failed to load feed", rStream.getId(),e);
+        }
+    }
+    public boolean isRssUrlStringValid(String urlString){
+        try {
+            URL url = new URL(urlString); //Mallformed URL throws
+            URI uri = URI.create(urlString);
+            String host = uri.getHost();
 
-        } catch (Exception ex) {
-            log.error("RSS id={} failed to load feed", rStream.getId(),ex);
+            if (!uri.getScheme().matches("(http|https)")) return false;
+            if (host == null || host.isBlank()) return false;
+            if (host.equalsIgnoreCase("localhost")) return false;
+
+            InetAddress address = InetAddress.getByName(host);
+            if (address.isAnyLocalAddress()
+                    || address.isLoopbackAddress()
+                    || address.isLinkLocalAddress()
+                    || address.isSiteLocalAddress()
+            ) return false;
+
+            new SyndFeedInput().build(new XmlReader(url));
+            return true;
+        } catch (Exception ex){
+            return false;
         }
     }
     @EventListener(ApplicationReadyEvent.class)
     public void updateOnStartup() {
+        log.info("Starting update of all streams on aplication startup.");
         updateRSSItemRepository();
     }
 
