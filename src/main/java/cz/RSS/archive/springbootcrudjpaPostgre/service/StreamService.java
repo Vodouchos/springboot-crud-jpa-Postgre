@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +31,13 @@ public class StreamService {
         return optionalRStream.orElse(null);
     }
     public void addStream(String name, String url){
-        if (!updateService.isRssUrlStringValid(url)) {
+        if (updateService.isRssUrlStringNotValid(url)) {
             log.error("invalid RSS URL={}", url);
             throw new InvalidRssUrlException("Invalid URL");
         }
         try {
-            RStream stream = streamRepo.save(new RStream(name,url));
+            String domain = URI.create(url).getHost();
+            RStream stream = streamRepo.save(new RStream(name,url,domain));
             log.info("RSS Stream saved into DB. Starting initial update. streamId={}", stream.getId());
             updateService.updateRSSItemRepository(stream.getId());
         } catch (DataIntegrityViolationException ex) {

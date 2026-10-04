@@ -17,9 +17,11 @@ public class RStream {
     private String name;
     @Column(unique = true)
     private String url;
+    private String domain;
 
-    public RStream(String name, String url){
+    public RStream(String name, String url,String domain){
         this.name=name;
+        this.domain=domain;
         this.url=url;
     }
 }

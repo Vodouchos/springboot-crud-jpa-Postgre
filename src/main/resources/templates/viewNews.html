@@ -11,21 +11,24 @@
 <div id="main">
     <div class="head" id="head">
         <ul class="menu1">
-            <li><a href="https://www.idnes.cz/zpravy" title="Zprávy">Zprávy</a>
+            <li th:each="domain : ${domains}">
+                <a th:href="@{/news(domain=${domain})}"
+                   th:text="${domain}">
+                    Domain
+                </a>
+
                 <ul class="menu2">
-                    <li><a href="https://www.idnes.cz/zpravy/domaci" title="Domácí">Domácí</a></li>
-                    <li><a href="https://www.idnes.cz/zpravy/zahranicni" title="Zahraničí">Zahraničí</a></li>
-                </ul>
-            </li>
-            <li><a href="https://www.idnes.cz/kraje" title="Kraje">Kraje</a>
-                <ul class="menu2">
-                    <li><a href="https://www.idnes.cz/praha" title="Praha a střední Čechy">Praha a střední Čechy</a>
+                    <li th:each="stream : ${streamsByDomain[domain]}">
+                        <a th:href="@{/news(streamId=${stream.id})}"
+                           th:text="${stream.name}">
+                            Stream
+                        </a>
                     </li>
-                    <li><a href="https://www.idnes.cz/brno" title="Brno">Brno</a></li>
                 </ul>
             </li>
         </ul>
     </div>
+
 
     <div th:if="${currentPage != null}" class="pagination-container" th:fragment="pagination">
         <a th:if="${currentPage > 1}"

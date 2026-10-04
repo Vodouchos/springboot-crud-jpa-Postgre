@@ -45,7 +45,7 @@ public class UpdateService {
     }
     private void updateRSSItemRepository(RStream rStream) {
         try {
-            if (!isRssUrlStringValid(rStream.getUrl())){
+            if (isRssUrlStringNotValid(rStream.getUrl())){
                 log.error("RSS {} loaded. Initializing update. streamId={}", rStream.getName(), rStream.getId());
                 return;
             }
@@ -62,7 +62,7 @@ public class UpdateService {
                     .toList());
             if (!newEntries.isEmpty() && newestItem.isPresent()){
                 // newEntries.get(0).getUri() works for ČTK other may be different
-                if (newEntries.get(0).getUri().equals(newestItem.get().getPermaLink())){
+                if (newEntries.get(0).getUri().equals(newestItem.get().getArticleLink())){
                     newEntries.remove(0);
                 }
             }
@@ -80,27 +80,27 @@ public class UpdateService {
             log.error("RSS id={} failed to load feed", rStream.getId(),e);
         }
     }
-    public boolean isRssUrlStringValid(String urlString){
+    public boolean isRssUrlStringNotValid(String urlString){
         try {
             URL url = new URL(urlString); //Mallformed URL throws
             URI uri = URI.create(urlString);
             String host = uri.getHost();
 
-            if (!uri.getScheme().matches("(http|https)")) return false;
-            if (host == null || host.isBlank()) return false;
-            if (host.equalsIgnoreCase("localhost")) return false;
+            if (!uri.getScheme().matches("(http|https)")) return true;
+            if (host == null || host.isBlank()) return true;
+            if (host.equalsIgnoreCase("localhost")) return true;
 
             InetAddress address = InetAddress.getByName(host);
             if (address.isAnyLocalAddress()
                     || address.isLoopbackAddress()
                     || address.isLinkLocalAddress()
                     || address.isSiteLocalAddress()
-            ) return false;
+            ) return true;
 
             new SyndFeedInput().build(new XmlReader(url));
-            return true;
-        } catch (Exception ex){
             return false;
+        } catch (Exception ex){
+            return true;
         }
     }
     @EventListener(ApplicationReadyEvent.class)

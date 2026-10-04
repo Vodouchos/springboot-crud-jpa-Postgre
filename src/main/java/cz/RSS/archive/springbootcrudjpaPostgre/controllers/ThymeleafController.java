@@ -1,7 +1,9 @@
 package cz.RSS.archive.springbootcrudjpaPostgre.controllers;
 
 import cz.RSS.archive.springbootcrudjpaPostgre.model.RSSItem;
+import cz.RSS.archive.springbootcrudjpaPostgre.model.RStream;
 import cz.RSS.archive.springbootcrudjpaPostgre.service.ItemService;
+import cz.RSS.archive.springbootcrudjpaPostgre.service.StreamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,11 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 public class ThymeleafController {
     private final ItemService itemService;
+    private final StreamService streamService;
     @GetMapping("/news-all")
     public String getSelected(Model model){
         //TODO: all instead of 1
@@ -36,6 +41,19 @@ public class ThymeleafController {
         model.addAttribute("items", itemsPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", itemsPage.getTotalPages());
+
+        List<RStream> streams = streamService.getAll();
+
+        List<String> domains = streams.stream()
+                .map(RStream::getDomain)
+                .distinct()
+                .collect(Collectors.toList());
+
+        Map<String, List<RStream>> streamsByDomain = streams.stream()
+                .collect(Collectors.groupingBy(RStream::getDomain));
+
+        model.addAttribute("domains", domains);
+        model.addAttribute("streamsByDomain", streamsByDomain);
         return "viewNews";
     }
 }
