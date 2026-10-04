@@ -19,6 +19,7 @@ public class UpdateController {
         log.info("CRON Update");
         updateService.updateRSSItemRepository();
     }
+/*
     @GetMapping(value = "/update")
     public void updateAll(){
         log.info("Called updateAll");
@@ -29,4 +30,5 @@ public class UpdateController {
         log.info("Called update id={}",id);
         updateService.updateRSSItemRepository(id);
     }
+*/
 }

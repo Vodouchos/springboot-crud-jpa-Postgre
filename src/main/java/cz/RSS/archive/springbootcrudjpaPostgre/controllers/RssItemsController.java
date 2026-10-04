@@ -20,17 +20,11 @@ import java.util.List;
 @RequestMapping("/items")
 public class RssItemsController {
     private final ItemService itemService;
-    private final UpdateService updateService;
 
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
-    public List<RSSItem> getItems(@RequestParam(name = "update", required = false) String updateString,
-                                  @RequestParam(name = "streamId", required = false) List<Integer> streamId){
-        boolean update = Boolean.parseBoolean(updateString);
+    public List<RSSItem> getItems(@RequestParam(name = "streamId", required = false) List<Integer> streamId){
         boolean all = CollectionUtils.isEmpty(streamId);
-        log.info("Called getItems. update={} Streams={} ", update , streamId);
-        if (update)
-            if (all) updateService.updateRSSItemRepository(); //update all
-                else streamId.forEach(updateService::updateRSSItemRepository); //partial update
+        log.info("Called getItems. Streams={} ", streamId);
         if (all) return itemService.getAll();
         return itemService.getSelection(streamId);
     }
