@@ -10,7 +10,7 @@
 <body>
 <div id="main">
     <div class="head" id="head">
-        <ul class="menu1">
+        <ul th:if="${domains != null}" class="menu1">
             <li th:each="domain : ${domains}">
                 <a th:href="@{/news(domain=${domain})}"
                    th:text="${domain}">

@@ -28,6 +28,7 @@ public class ThymeleafController {
         model.addAttribute("items", itemService.getSelection(List.of(1)));
         return "viewNews";
     }
+
     @GetMapping("/news")
     public String getSelectedPaged(Model model, @RequestParam(defaultValue = "1") int page,
                                    @RequestParam(defaultValue = "15") int pageSize) {
