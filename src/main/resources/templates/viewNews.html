@@ -10,7 +10,7 @@
 <body>
 <div id="main">
     <div class="head" id="head">
-        <ul th:if="${domains != null}" class="menu1">
+        <ul class="menu1">
             <li th:each="domain : ${domains}">
                 <a th:href="@{/news(domain=${domain})}"
                    th:text="${domain}">
@@ -43,7 +43,7 @@
     <div id="content" class="content">
         <div th:each="RSSItem:${items}" class="article-container">
             <div class="article-image-container">
-                <a th:href="@{${RSSItem.permaLink}}">
+                <a th:href="@{${RSSItem.articleLink}}">
                     <img th:src="@{${RSSItem.thumbLink}}" th:title="${RSSItem.title}" alt="Article Image" class="article-image"
                          onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';">
                     <span class="publish-date"
@@ -53,7 +53,7 @@
                 </a>
             </div>
             <div class="article-content">
-                <h3 class="article-title"><a th:href="@{${RSSItem.permaLink}}" th:text="${RSSItem.title}"></a></h3>
+                <h3 class="article-title"><a th:href="@{${RSSItem.articleLink}}" th:text="${RSSItem.title}"></a></h3>
                 <p class="article-summary" th:text="${RSSItem.text}"></p>
             </div>
         </div>
